@@ -11,7 +11,7 @@ class LayerNormalization(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         mean = x.mean(-1, keepdim=True)
         var = x.var(-1, keepdim=True, unbiased=False)
-        norm_x = (x - mean) * torch.sqrt(var + self.eps)
+        norm_x = (x - mean) / torch.sqrt(var + self.eps)
         return self.gamma * norm_x + self.beta
 
 
@@ -28,4 +28,12 @@ class LayerNormalization(nn.Module):
 🔸 beta = 0（バイアス初期値）
 	•	出力にバイアスを加えない（平均0のまま）。
 	•	→ 非正規化方向への変化は起きない。
+ 
+Pre-LN (BERT, GPT系。　最近はこっちが主流)
+層正規化　→ 任意のレイヤー　→ 残差結合
+この方が学習が安定するらしい
+
+Post-LN (元祖Transformer論文)
+任意のレイヤー　→ 層正規化＋残差結合
+こっちは学習が不安定らしい
 """

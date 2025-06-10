@@ -23,7 +23,7 @@ class MultiHeadAttention(nn.Module):
         # クエリ、キー、バリューを線形変換
         Q = self.q_linear(q)
         K = self.k_linear(k)
-        v = self.v_linear(v)
+        V = self.v_linear(v)
         
         # Q, K, Vをヘッド数に分割 (batch_size, seq_len, d_model) -> (batch_size, num_heads, seq_len, head_dim)
         Q = Q.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)  # (B, H, Q_len, d_k)
